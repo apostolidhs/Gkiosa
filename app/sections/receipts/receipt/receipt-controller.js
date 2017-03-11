@@ -27,7 +27,8 @@ function ReceiptController($rootScope, $state, $stateParams, toastr, gkiosaApi, 
       gkiosaApi.findAppInfo()
         .then(appInfo => {
           self.appInfo = appInfo;
-          self.receipt = gkiosaApiUtilities.createEmptyReceipt(appInfo.receiptId);
+          const id = self.vector === 'CUSTOMERS' ? appInfo.receiptCustomersId : appInfo.receiptSuppliersId;
+          self.receipt = gkiosaApiUtilities.createEmptyReceipt(self.vector, id);
         });
     }
     gkiosaApi.findAllUsers().then(resp => self.users = resp.results);
@@ -38,10 +39,9 @@ function ReceiptController($rootScope, $state, $stateParams, toastr, gkiosaApi, 
   }
 
   function createReceipt(receipt) {
-    receipt.vector = self.vector;
     self.promiseOfreceipt = gkiosaApi.createReceipt(receipt).then(
       receipt => {
-        self.appInfo.increaseReceipt();
+        self.vector === 'CUSTOMERS' ? self.appInfo.increaseReceiptCustomers() : self.appInfo.increaseReceiptSuppliers();
         $state.go('receipts.receipt', {receiptId: receipt._id, vector: self.vector, name: receipt.name });
         toastr.success(`Η απόδειξη ${receipt.receiptNum} δημιουργήθηκε`);
       }

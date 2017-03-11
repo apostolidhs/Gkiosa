@@ -26,8 +26,10 @@ function gkiosaInitApp(gkiosaApi) {
 
   function createAppInfo() {
     return {
-      invoiceId: 1,
-      receiptId: 1
+      invoiceCustomersId: 100,
+      invoiceSuppliersId: 100,
+      receiptCustomersId: 100,
+      receiptSuppliersId: 100
     };
   }
 }

@@ -79,7 +79,7 @@ angular.module('gkiosa.app', [
     number: 'BigNumber',
     precision: 20
   });
-  math.do = str => math.eval(str).toNumber();
+  math.do = str => math.eval(str).toDecimalPlaces(2).toNumber();
 })
 
 .config($ngBootboxConfigProvider => {

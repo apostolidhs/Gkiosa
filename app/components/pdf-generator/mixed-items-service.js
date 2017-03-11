@@ -120,7 +120,7 @@ function gkiosaPdfGeneratorMixedItems($filter, gkiosaPdfGenerator) {
       gksEuro(item.ammount.credit),
       gksEuro(item.progressive.charge),
       gksEuro(item.progressive.credit),
-      gksEuro(Math.abs(item.progressive.total))
+      gksEuro(item.progressive.total)
     ].map(t => ({ text: t, style: 'mixedItem'}));
 
     const header = [
@@ -139,7 +139,7 @@ function gkiosaPdfGeneratorMixedItems($filter, gkiosaPdfGenerator) {
       p.quantity,
       gksEuro(p.price),
       gksEuro(p.getPrice()),
-      p.vat,
+      gksEuro(p.getVat()),
       gksEuro(p.getVatPrice())
     ].map(t => ({ text: _.toString(t), style: 'products'})));
 
@@ -154,7 +154,7 @@ function gkiosaPdfGeneratorMixedItems($filter, gkiosaPdfGenerator) {
       gksEuro(item.ammount.credit),
       gksEuro(item.progressive.charge),
       gksEuro(item.progressive.credit),
-      gksEuro(Math.abs(item.progressive.total))
+      gksEuro(item.progressive.total)
     ].map(t => ({ text: t, style: 'mixedItem'}));
   }
 

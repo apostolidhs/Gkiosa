@@ -185,24 +185,25 @@ function gkiosaApiUtilities($rootScope, $q, $state, $ngBootbox, toastr, gkiosaAp
     }
   }
 
-  function createEmptyInvoice(uniqId) {
+  function createEmptyInvoice(vector, uniqId) {
     gksAssert(uniqId > 0);
     return {
       uniqId,
+      vector,
       products: [],
       date: new Date(),
       credit: false,
       userId: undefined,
       user: undefined,
-      invoiceNum: undefined,
-
+      invoiceNum: undefined
     };
   }
 
-  function createEmptyReceipt(uniqId) {
+  function createEmptyReceipt(vector, uniqId) {
     gksAssert(uniqId > 0);
     return {
       uniqId,
+      vector,
       userId: undefined,
       user: undefined,
       date: new Date(),

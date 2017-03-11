@@ -254,12 +254,20 @@ function gkiosaApi($q, toastr, gkiosaContext, gkiosaConfig) {
       .then(appInfoRes => {
         const appInfo = _.get(appInfoRes, 'results[0]');
         if (appInfo) {
-          appInfo.increaseInvoice = () => {
-            ++appInfo.invoiceId;
+          appInfo.increaseInvoiceCustomers = () => {
+            ++appInfo.invoiceCustomersId;
             return api.updateAppInfo(appInfo._id, appInfo);
           };
-          appInfo.increaseReceipt = () => {
-            ++appInfo.receiptId;
+          appInfo.increaseInvoiceSuppliers = () => {
+            ++appInfo.invoiceSuppliersId;
+            return api.updateAppInfo(appInfo._id, appInfo);
+          };
+          appInfo.increaseReceiptCustomers = () => {
+            ++appInfo.receiptCustomersId;
+            return api.updateAppInfo(appInfo._id, appInfo);
+          };
+          appInfo.increaseReceiptSuppliers = () => {
+            ++appInfo.receiptSuppliersId;
             return api.updateAppInfo(appInfo._id, appInfo);
           };
         }
@@ -299,18 +307,36 @@ function gkiosaApi($q, toastr, gkiosaContext, gkiosaConfig) {
         const progressive = {};
         item.isInvoice = _.has(item, 'products');
 
-        const addOnCharge = item.vector === 'CUSTOMERS' && item.isInvoice
-                  || item.vector === 'SUPPLIERS' && !item.isInvoice;
+        const addOnCharge = item.vector === 'CUSTOMERS';
+        // const addOnCharge = item.vector === 'CUSTOMERS' && item.isInvoice
+        //           || item.vector === 'SUPPLIERS' && !item.isInvoice;
+
         item.ammount = {
           charge: addOnCharge ? item.getTotalVatPrice() : 0,
           credit: !addOnCharge ? item.getTotalVatPrice() : 0
         };
 
+        var charge = math.do(`${item.ammount.charge} + ${prevItem.progressive.charge}`);
+        var credit = math.do(`${item.ammount.credit} + ${prevItem.progressive.credit}`);
         item.progressive = {
-          charge: math.do(`${item.ammount.charge} + ${prevItem.progressive.charge}`),
-          credit: math.do(`${item.ammount.credit} + ${prevItem.progressive.credit}`),
-          total: math.do(`${prevItem.progressive.credit} - ${prevItem.progressive.charge}`)
+          charge,
+          credit,
+          total: math.do(`${charge} - ${credit}`)
         };
+
+        // if (item.isInvoice) {
+        //   item.progressive = {
+        //     charge: math.do(`${item.ammount.charge} + ${prevItem.progressive.charge}`),
+        //     credit: math.do(`${item.ammount.credit} + ${prevItem.progressive.credit}`),
+        //     total: math.do(`${prevItem.progressive.credit} - ${Math.abs(prevItem.progressive.charge)}`)
+        //   };
+        // } else {
+        //   item.progressive = {
+        //     charge: math.do(`${prevItem.progressive.charge} - ${item.ammount.charge}`),
+        //     credit: math.do(`${prevItem.progressive.credit} - ${item.ammount.credit}`),
+        //     total: math.do(`${prevItem.progressive.credit} - ${Math.abs(prevItem.progressive.charge)}`)
+        //   };
+        // }
 
         prevItem = item;
 

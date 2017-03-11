@@ -53,7 +53,8 @@ function InvoiceController(
       gkiosaApi.findAppInfo()
         .then(appInfo => {
           self.appInfo = appInfo;
-          self.invoice = gkiosaApiUtilities.createEmptyInvoice(appInfo.invoiceId);
+          const id = self.vector === 'CUSTOMERS' ? appInfo.invoiceCustomersId : appInfo.invoiceSuppliersId;
+          self.invoice = gkiosaApiUtilities.createEmptyInvoice(self.vector, id);
           self.invoiceProductsTableParams = gkiosaPagination.createStaticNgTableParams(self.invoice.products);
         });
     }
@@ -78,10 +79,9 @@ function InvoiceController(
     if (!warningIfProductEdit()) {
       return;
     }
-    invoice.vector = self.vector;
     self.promiseOfinvoice = gkiosaApi.createInvoice(invoice).then(
       invoice => {
-        self.appInfo.increaseInvoice();
+        self.vector === 'CUSTOMERS' ? self.appInfo.increaseInvoiceCustomers() : self.appInfo.increaseInvoiceSuppliers();
         $state.go('invoices.invoice', {invoiceId: invoice._id, vector: self.vector, name: invoice.name });
         toastr.success(`Η απόδειξη ${invoice.invoiceNum} δημιουργήθηκε`);
       }

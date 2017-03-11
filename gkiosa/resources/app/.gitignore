@@ -1,5 +1,0 @@
-node_modules
-db/*
-app/third-party-libs/*
-!app/third-party-libs/forza
-gkiosa-win32-ia32

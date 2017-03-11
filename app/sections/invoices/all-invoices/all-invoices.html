@@ -42,7 +42,7 @@
             {{row.products.length}}
             <button type="button" ng-click="allInvoicesCtrl.expandInvoice($index, row)" class="btn btn-default btn-xs" title="Προιόντα"><i class="fa fa-chevron-down"></i></button>
           </td>
-          <td title="'Σύνολο/Σύνολο (Φ.Π.Α)'">{{row.getTotalPrice()}}/{{row.getTotalVatPrice()}}</td>
+          <td title="'Σύνολο / Φ.Π.Α / Σύνολο (Φ.Π.Α)'">{{row.getTotalPrice()}} / {{row.getTotalVat()}} / {{row.getTotalVatPrice()}}</td>
           <td>
             <button type="button" ng-click="allInvoicesCtrl.editInvoice(row)" class="btn btn-primary btn-sm" title="Επεξεργασία"><i class="fa fa-pencil"></i></button>
             <button type="button" ng-click="allInvoicesCtrl.deleteInvoice(row)" class="btn btn-danger btn-sm" title="Διαγραφή"><i class="fa fa-trash-o"></i></button>
